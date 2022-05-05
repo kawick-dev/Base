@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la parcelle {{parcelle.proprietaire.code}}{{parcelle.codenum}}{% endblock %}
+
+{% block body %}
+
+  <div class="card mb-3" style="margin-top:5em; width: 40em; display: flex; justify-content: center; margin: auto;">
+    <h3 class="card-header">{{parcelle.commune}}</h3>
+    {% if parcelle.photo == NULL %}
+    <img style="width : 40em; height: 30em;" src="{{asset('uploads/pasImage.png')}}">
+    {% else %}
+    <img style="width : 40em; height: 30em;" src="{{asset('uploads/')}}{{parcelle.photo}}">
+    {% endif %}
+
+    <div class="card-body">
+      <p class="card-text">{{parcelle.description}}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Commune : {{parcelle.commune}}</li>
+        <li class="list-group-item">Superficie : {{parcelle.superficie}} ha</li>
+        <li class="list-group-item">Coordonnée GPS : <a href="https://www.google.fr/maps/dir/50.321726,+2.681225/{{parcelle.coordonnegps}}" target="_blank">{{parcelle.coordonnegps}}</a></li>
+    </ul>
+  </div>
+
+  <div style="margin-top:5em;">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Nom</th>
+          <th scope="col">Date de début</th>
+          <th scope="col">Date de fin</th>
+          <th scope="col">Surface Epandue</th>
+          <th scope="col">Quantité</th>
+          <th scope="col">Culture</th>
+        </tr>
+      </thead>
+      <tbody>
+       {% for campagne in listeCampagne %}
+        <tr>
+          <th scope="row">{{campagne.campagne.nom}}</th>
+          <td>{{campagne.campagne.dateDebut|date('d-m-Y')}}</td>
+          <td>{{campagne.campagne.dateDebut|date('d-m-Y')}}</td>
+          <td>{{campagne.surfaceEpandue}} ha</td>
+          <td>{{campagne.quantite}} /ha</td>
+          <td>{{campagne.culture}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+{% endblock %}

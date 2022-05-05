@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AjoutParcelleCampagneRecolteController!{% endblock %}
+
+{% block body %}
+
+<div>
+	<h1>{{campagne.nom}}<h1>
+	<input type="hidden" id="numCampagneid" name="numCampagneid" values="{{campagne.id}}">
+</div>
+<h1 class="text-center text-primary mt-4 pt-4 display-1 fw-bold">Liste des Parcelles</h1>
+<div class="table-responsive">
+	<table class="table table-hover">
+		<thead>
+			<tr class="fw-bold text-primary">
+				<th scope="col">Commune</th>
+				<th scope="col">Exploitant</th>
+				<th scope="col">Code</th>
+				<th scope="col">Superficie</th>
+				<th scope="col">Coordonnée GPS</th>
+				<th scope="col">Culture</th>
+				<th scope="col">Add</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for parcelle in parcelles %}
+				{% if parcelle.exploiter == true %}
+					{% if parcelle.id not in listParcelle %}
+						<tr class="table-active">
+							
+							<td>{{parcelle.commune}}</td>
+							<td>{{parcelle.proprietaire.nom}}</td>
+							<td>{{parcelle.proprietaire.code}}{{parcelle.codenum}}</td>
+							<td>{{parcelle.superficie}}/H</td>
+							<td><a href="https://www.google.fr/maps/dir/50.321726,+2.681225/{{parcelle.coordonnegps}}" target="_blank">{{parcelle.coordonnegps}}</a></td>
+							<form action="{{path('ajout_parcelle_campagne_recolte',{'idCampagneRecolte':campagne.id})}}" method="POST" class="form-example">
+								<td><input name="culture" type="text"></td>
+                                <input name="idParcelle" type="hidden" value="{{parcelle.id}}">
+								<td><input type="submit" value="Ajouter"></td>
+							</form>
+							<input name="parcelleId" type="hidden" value="{{parcelle.id}}">
+						</tr>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+{% endblock %}

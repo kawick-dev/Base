@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des parcelles{% endblock %}
+
+{% block body %}
+<h1 style="text-align: center; padding-top: 1em;"> Liste des parcelles </h1>
+{% if is_granted('ROLE_ADMIN') %}
+  <div style="display: flex; align-items: center; justify-content: center; height: 10em;">
+    <a  href="{{path('ajout_parcelle')}}"<button type="button" class="btn btn-success">Ajouter une parcelle</button></a>
+  </div>
+{% endif %}
+  <div style=" align-content: center; display: flex; ">
+
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Commune</th>
+            <th scope="col">Proprietaire</th>
+            <th scope="col">Code</th>
+            <th scope="col">Superficie</th>
+            <th scope="col">Coordonnée GPS</th>
+            {% if is_granted('ROLE_ADMIN') %}
+            <th scope="col">Bouton</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+        {% for parcelle in parcelles %}
+          {% if parcelle.exploiter == true %}
+            <tr class="table-active">
+              <td>{{parcelle.commune}}</th>
+              <td>{{parcelle.proprietaire.nom}}</td>
+              <td><a href="{{path('fiche_parcelle_perso', {'idParcelle':parcelle.id})}}">{{parcelle.proprietaire.code}}{{parcelle.codenum}}</td>
+              <td>{{parcelle.superficie}} ha</td>
+              <td><a href="https://www.google.fr/maps/dir/50.321726,+2.681225/{{parcelle.coordonnegps}}" target="_blank">{{parcelle.coordonnegps}}</a></td>
+              {% if is_granted('ROLE_ADMIN') %}
+              <td>
+                  <a href="{{path('liste_parcelle_modification', {'idParcelle':parcelle.id})}}" <button type="button" class="btn btn-info">Modifier</button></a>
+                  <a href="{{path('liste_parcelle_suppression', {'idParcelle':parcelle.id})}}" <button type="button" class="btn btn-danger">Supprimer</button></a>
+              </td>
+              {% endif %}
+            </tr>
+          {% endif %}
+          {% if parcelle.exploiter == false %}
+            <tr class="table-danger">
+              <th scope="row">{{parcelle.commune}}</th>
+              <td>{{parcelle.proprietaire.nom}}</td>
+              <td><a href="{{path('fiche_parcelle_perso', {'idParcelle':parcelle.id})}}">{{parcelle.proprietaire.code}}{{parcelle.codenum}}</td>
+              <td>{{parcelle.superficie}}/H</td>
+              <td><a href="https://www.google.fr/maps/dir/50.321726,+2.681225/{{parcelle.coordonnegps}}" target="_blank">{{parcelle.coordonnegps}}</a></td>
+              {% if is_granted('ROLE_ADMIN') %}
+              <td>
+                  <p>La parcelle n'est plus utilisée</p>
+              </td>
+              {% endif %}
+            </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
+
+
+{% endblock %}

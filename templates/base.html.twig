@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}BIOGY{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        
+
+        {% block stylesheets %}
+            <link href="https://bootswatch.com/5/lux/bootstrap.min.css" rel="stylesheet">
+        {% endblock %}
+
+
+    </head>
+    <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{{path('home')}}">Projet-Meta</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav me-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{path('liste_campagne')}}">Liste des campagnes 
+                                <span class="visually-hidden">(current)</span>
+                            </a>
+                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{path('liste_parcelle')}}">Liste des parcelles
+                                <span class="visually-hidden">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{path('liste_exploitant')}}">Liste des exploitants
+                                <span class="visually-hidden">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{path('liste_utilisateur')}}">Liste des utlisateurs</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %} 
+                    <div style="align-content: start; display: flex; flex-direction: row; justify-content: center;">
+                        <div style="width:5em;">
+                            <span class="badge rounded-pill bg-success">Connecte</span> 
+                        </div>
+                        <p style="color: white; padding-left: 1em;padding-right: 1em; margin-bottom: 0em; ">{{ app.user.username }}</p>
+                        <a href="{{path('app_logout')}}"<button type="button" class="btn btn-danger">Deconnexion</button></a>
+                    </div>
+                    {% else %} 
+                            <span class="badge rounded-pill bg-danger">Deconnecte</span>
+                            <div style="padding-left:1em;">
+                            <a href="{{path('login')}}" <button type="button" class="btn btn-info">Connexion</button></a>
+                            </div>
+                    {% endif %}
+
+                </div>
+        </div>
+</nav>
+{% for message in app.flashes('notice') %}
+     <h2 class="alert alert-warning text-center mt-4 mb-4" role="alert">
+      {{ message }}
+      </h2>
+    {% endfor %}
+        {% block body %}
+        
+        {% endblock %}
+
+        {% block javascripts %}
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+        {% endblock %}
+    </body>
+</html>
